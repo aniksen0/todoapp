@@ -6,10 +6,10 @@ session_start();
 
 if ( isset($_POST['email']) && isset($_POST['pw'])  ) {
 
-    //$salt='XyZzy12*_';
-   // $pw= hash('md5',$salt.$_POST['pw']);
+    $salt='XyZzy12*_';
+    $pw= hash('md5',$salt.$_POST['pw']);
     $check='anik';
-    $pw=$_POST['pw'];
+   
 
     $sql = "SELECT * FROM info
         WHERE email = :email AND pw = :pw";

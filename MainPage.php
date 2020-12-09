@@ -41,13 +41,16 @@ else
 
 
 }
-if (isset($_POST['delete']))
+if (isset($_POST['del']))
 {
     $sql3="DELETE FROM do where listid=:id ";
     $data=$conn->prepare($sql3);
     $data->execute(array(
-       ':id'=>$_POST['delete']
+       ':id'=>$_POST['del']
     ));
+    $_SESSION['success']="Deleted";
+    header("Location:MainPage.php");
+    return;
 
 }
 ?>
@@ -62,8 +65,20 @@ if (isset($_POST['delete']))
 <body>
 
 <div id="myDIV" class="header">
-  <h2 style="margin:5px">Welcome <?php echo $_SESSION['name'];
-      echo $_SESSION['addid']; ?> </h2>
+  <h2 style="margin:5px">Welcome  <?php echo $_SESSION['name'];?> </h2>
+    <?php
+      if(isset($_SESSION['success']))
+      {
+          echo "<p style='color:chartreuse'>".$_SESSION['success']. "</p>";
+          unset($_SESSION['success']);
+      }
+      else if(isset($_SESSION['error']))
+      {
+          echo "<p style='color:white'>".$_SESSION['error']. "</p>";
+          unset($_SESSION['error']);
+      }
+
+      ?>
     <form method="post">
   <input type="text" name="do" id="myInput" placeholder="Title...">
   <button type="submit" class="btn addBtn ">Add</button>
@@ -86,14 +101,11 @@ if (isset($_POST['delete']))
 //            echo "<form method='post'>";
 //            echo '<button class="btn btn-new btn-warning" name="delete" value="' . $row['listtid'] . '" type="submit"> Delete</button>';
 //            echo "</form>";
-            //Testing modal in php
 
-
-
-
-            //modal testing ok
-            echo'<a class="btn btn-warning" href="delete.php?delete='.$row['listid'].'">Delete</a>';
-            echo $row['listid'];
+            echo '<form method="post">';
+            echo '<button class="btn-warning btn" name="del" value="'. $row['listid'] . '">Delete </button>';
+            echo'</form>';
+            //echo $row['listid'];
             echo $row['do'];
             echo "</li>";
 
@@ -103,9 +115,13 @@ if (isset($_POST['delete']))
 
 </ul>
 <a href="Logout.php">
-<button type="button" class="btn addBtn btn-warning">Log-Out</button>
+<button type="button" class="btn addBtn btn-danger">Log-Out</button>
 </a>
 
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+
 </body>
 </html>
