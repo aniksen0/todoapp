@@ -1,6 +1,7 @@
 <?php
 require "conn.php";
 session_start();
+
 if (isset($_POST['do']))
 {
     if (empty($_POST['do']))
@@ -31,12 +32,22 @@ if (!isset($_SESSION['name']))
 }
 else
 {
-    $sql="SELECT do from do where addid=:addid";
+    $sql="SELECT * from do where addid=:addid";
     $data=$conn->prepare($sql);
     $data->execute(array(
        ':addid'=>$_SESSION['addid']
     ));
     $rows = $data->fetchAll(PDO::FETCH_ASSOC);
+
+
+}
+if (isset($_POST['delete']))
+{
+    $sql3="DELETE FROM do where listid=:id ";
+    $data=$conn->prepare($sql3);
+    $data->execute(array(
+       ':id'=>$_POST['delete']
+    ));
 
 }
 ?>
@@ -44,7 +55,9 @@ else
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="main.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <link href="main.css" rel="stylesheet">
 </head>
 <body>
 
@@ -70,6 +83,17 @@ else
         foreach($rows as $row)
         {
             echo "<li>";
+//            echo "<form method='post'>";
+//            echo '<button class="btn btn-new btn-warning" name="delete" value="' . $row['listtid'] . '" type="submit"> Delete</button>';
+//            echo "</form>";
+            //Testing modal in php
+
+
+
+
+            //modal testing ok
+            echo'<a class="btn btn-warning" href="delete.php?delete='.$row['listid'].'">Delete</a>';
+            echo $row['listid'];
             echo $row['do'];
             echo "</li>";
 
@@ -78,8 +102,10 @@ else
     ?>
 
 </ul>
+<a href="Logout.php">
+<button type="button" class="btn addBtn btn-warning">Log-Out</button>
+</a>
 
-
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </body>
 </html>
